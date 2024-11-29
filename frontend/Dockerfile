@@ -22,7 +22,6 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy the rest of the app source code
 COPY . .
 
-# Build the app (This will generate the .next folder and standalone files)
 RUN npm run build
 
 # Stage 3: Serve the built app using a lightweight image
@@ -33,6 +32,8 @@ FROM nginx:alpine
 
 # Copy built React app to NGINX's web root
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
